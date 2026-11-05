@@ -247,6 +247,13 @@ def run(dry_run=False):
         state["initialized"] = True
     elif new:
         send_jobs(new)
+    elif os.environ.get("GITHUB_EVENT_NAME") == "workflow_dispatch":
+        # 버튼(수동 실행)으로 확인했을 때는 새 공고가 없어도 결과를 알려줌
+        failed = [n for n, c in state["fails"].items() if c]
+        msg = f"🔍 지금 확인했어요. 새 공고는 없어요. (조건에 맞는 공고 {len(uniq)}건 모두 이미 보낸 것)"
+        if failed:
+            msg += f"\n⚠️ 수집 실패: {', '.join(failed)}"
+        tg_send(msg)
     print(f"새 공고 {len(new)}건")
 
     for j in new:
