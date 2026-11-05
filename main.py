@@ -24,7 +24,7 @@ import config
 KST = timezone(timedelta(hours=9))
 STATE_FILE = Path(__file__).with_name("seen.json")
 KEEP_DAYS = 120
-FAIL_ALERT_THRESHOLD = 6  # 연속 실패 6회(약 3시간)면 한 번 경고
+FAIL_ALERT_THRESHOLD = 2  # 연속 실패 2회(약 6시간)면 한 번 경고
 HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
     "(KHTML, like Gecko) Chrome/130.0 Safari/537.36",
