@@ -2,7 +2,7 @@ name: 인턴 공고 확인
 
 on:
   schedule:
-    - cron: "*/30 * * * *"   # 30분마다 (GitHub 사정으로 몇 분 늦어질 수 있음)
+    - cron: "7,37 * * * *"   # 30분마다 (매시 7분/37분 — 정각·30분은 GitHub가 붐벼 실행이 자주 밀림)
   workflow_dispatch:          # Actions 탭에서 수동 실행 버튼
 
 permissions:
@@ -33,4 +33,4 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add seen.json
-          git diff --cached --quiet || (git commit -m "update seen.json" && git push)
+          git diff --cached --quiet || (git commit -m "update seen.json" && git pull --rebase && git push)
