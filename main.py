@@ -207,6 +207,14 @@ def run(dry_run=False):
     state.setdefault("fails", {})
     now = datetime.now(KST).isoformat(timespec="seconds")
 
+    # GitHub 예약 실행은 늦거나 건너뛰는 일이 잦아 3시간 구간마다 예비 시각을 여러 개 걸어 둠.
+    # 같은 구간에서 이미 확인했으면(100분 이내) 예비 실행은 건너뜀.
+    if os.environ.get("GITHUB_EVENT_NAME") == "schedule" and state.get("last_run"):
+        if datetime.now(KST) - datetime.fromisoformat(state["last_run"]) < timedelta(minutes=100):
+            print(f"최근 확인({state['last_run']}) 후 100분이 안 지나 건너뜀")
+            return
+    state["last_run"] = now
+
     matched = []
     for name, fetch in SOURCES.items():
         try:
